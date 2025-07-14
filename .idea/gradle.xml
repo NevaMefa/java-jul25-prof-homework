@@ -7,7 +7,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/L01-gradle" />
+            <option value="$PROJECT_DIR$/hw01-gradle" />
+            <option value="$PROJECT_DIR$/hw02-generics" />
           </set>
         </option>
       </GradleProjectSettings>
