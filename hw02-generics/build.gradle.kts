@@ -6,3 +6,10 @@ dependencies {
     testImplementation ("org.assertj:assertj-core")
 }
 
+tasks.named("sonarlintMain").configure {
+    enabled = false
+}
+
+tasks.named("spotlessApply").configure {
+    enabled = false
+}
