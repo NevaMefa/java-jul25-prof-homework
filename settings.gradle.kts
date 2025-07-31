@@ -1,7 +1,9 @@
 rootProject.name = "java-jul25-prof-homeworks"
 include("hw01-gradle")
-include(":hw02-generics")
-include(":hw03-annotation")
+include("hw02-generics")
+include("hw03-annotation")
+include("hw04-gc")
+
 
 
 
