@@ -11,7 +11,7 @@ public class Main {
         atm.deposit(Denomination.D50, 10);
 
         System.out.println("Баланс: " + atm.getBalance());
-        System.out.println("Инвентарь: " + atm.getInventory());
+        System.out.println("Купюры: " + atm.getInventory());
 
         System.out.println("--- Выдача 7650 ---");
         System.out.println("Выдано: " + atm.withdraw(7650));
