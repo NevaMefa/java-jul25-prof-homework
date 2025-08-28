@@ -3,6 +3,7 @@ include("hw01-gradle")
 include("hw02-generics")
 include("hw03-annotation")
 include("hw04-gc")
+include("hw06-ATM")
 include("hw05-ClassLoader")
 
 
