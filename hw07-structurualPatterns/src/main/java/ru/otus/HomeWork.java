@@ -1,5 +1,10 @@
 package ru.otus;
 
+import ru.otus.model.Message;
+import ru.otus.model.ObjectForMessage;
+import ru.otus.processor.Processor;
+import ru.otus.processor.ProcessorSwapFields11And12;
+
 public class HomeWork {
 
     /*
@@ -20,5 +25,22 @@ public class HomeWork {
           по аналогии с Demo.class
           из элеменов "to do" создать new ComplexProcessor и обработать сообщение
         */
+        // создаём объект field13
+        ObjectForMessage ofm = new ObjectForMessage();
+        ofm.setData(java.util.List.of("X", "Y", "Z"));
+
+        // создаём сообщение
+        Message msg = new Message.Builder(1)
+                .field11("AAA")
+                .field12("BBB")
+                .field13(ofm)
+                .build();
+
+        System.out.println("До обработки: " + msg);
+
+        Processor processor = new ProcessorSwapFields11And12();
+        Message result = processor.process(msg);
+
+        System.out.println("После обработки: " + result);
     }
 }
