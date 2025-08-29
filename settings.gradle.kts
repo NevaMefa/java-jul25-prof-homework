@@ -5,7 +5,7 @@ include("hw03-annotation")
 include("hw04-gc")
 include("hw06-ATM")
 include("hw05-ClassLoader")
-
+include("hw07-structurualPatterns")
 
 
 
