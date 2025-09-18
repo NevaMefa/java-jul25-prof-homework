@@ -1,0 +1,13 @@
+[
+  { "name": "val1", "value": 1.0 },
+  { "name": "val1", "value": 2.0 },
+
+  { "name": "val2", "value": 10.0 },
+  { "name": "val2", "value": 5.0 },
+  { "name": "val2", "value": 15.0 },
+
+  { "name": "val3", "value": 11.0 },
+  { "name": "val3", "value": 12.0 },
+  { "name": "val3", "value": 3.0 },
+  { "name": "val3", "value": 7.0 }
+]
