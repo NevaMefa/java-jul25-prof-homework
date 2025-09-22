@@ -6,7 +6,8 @@ include("hw04-gc")
 include("hw06-ATM")
 include("hw05-ClassLoader")
 include("hw07-structurualPatterns")
-include("hw00-io")
+include("hw08-io")
+include("hw10-jpql")
 
 
 
@@ -33,3 +34,4 @@ pluginManagement {
     }
 }
 include("hw08-io")
+include("hw10-jpql")
