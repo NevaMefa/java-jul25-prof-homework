@@ -35,6 +35,6 @@ tasks {
 
    
     build {
-        dependsOn("setterDemoJar", "proxyDemoJar", "summatorDemoJar")
+        dependsOn("setterDemoJar", "proxyDemoJar")
     }
 }
