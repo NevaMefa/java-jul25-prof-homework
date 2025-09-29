@@ -9,6 +9,7 @@ include("hw07-structurualPatterns")
 include("hw08-io")
 include("hw09-jdbc")
 include("hw10-jpql")
+include("hw11-ehcache")
 
 
 
