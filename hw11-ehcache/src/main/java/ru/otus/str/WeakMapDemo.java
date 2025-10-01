@@ -13,7 +13,7 @@ public class WeakMapDemo {
         Map<String, byte[]> cache = Collections.synchronizedMap(new WeakHashMap<>());
 
         for (int i = 0; i < 100_000; i++) {
-            String key = new String("k" + i);
+            String key = "k" + i;
             cache.put(key, new byte[1024]); // ~1KB
             if (i % 10_000 == 0) {
                 log.info("put {}", i);
@@ -26,7 +26,8 @@ public class WeakMapDemo {
 
         try {
             Thread.sleep(1000);
-        } catch (InterruptedException ignored) {
+        } catch (Exception e) {
+            log.error("Exception occurred: ", e);
         }
 
         log.info("size after GC ~ {}", cache.size());

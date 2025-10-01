@@ -4,6 +4,8 @@ import java.util.List;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.otus.cachehw.HwCache;
+import ru.otus.cachehw.MyCache;
 import ru.otus.dbmigrations.MigrationsExecutorFlyway;
 import ru.otus.model.Address;
 import ru.otus.model.Client;
@@ -23,16 +25,19 @@ public class DbServiceDemo {
 
         var tx = new TransactionManagerHibernate(sf);
         var template = new DataTemplateHibernate<>(Client.class);
-        DBServiceClient service = new DbServiceClientImpl(tx, template);
+
+        HwCache<String, Client> cache = new MyCache<>();
+
+        DBServiceClient service = new DbServiceClientImpl(tx, template, cache);
 
         var saved = service.saveClient(
                 new Client(null, "Vasya", new Address(null, "Lenina"), List.of(new Phone(null, "12345"))));
         long id = saved.getId();
 
         long t1 = System.nanoTime();
-        service.getClient(id); // БД
+        service.getClient(id);
         long t2 = System.nanoTime();
-        service.getClient(id); // кэш
+        service.getClient(id);
         long t3 = System.nanoTime();
 
         log.info("first read (DB): {} ms", (t2 - t1) / 1_000_000);
