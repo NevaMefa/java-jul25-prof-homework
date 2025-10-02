@@ -31,9 +31,9 @@ public class DbServiceClientImpl implements DBServiceClient {
             Client managed = (client.getId() == null)
                     ? clientDataTemplate.insert(session, client)
                     : clientDataTemplate.update(session, client);
+
             log.info("{} client: {}", client.getId() == null ? "created" : "updated", managed);
-            if (managed.getAddress() != null) managed.getAddress().getStreet();
-            if (managed.getPhones() != null) managed.getPhones().size();
+
             cache.put(String.valueOf(managed.getId()), managed);
             return managed;
         });
@@ -41,7 +41,8 @@ public class DbServiceClientImpl implements DBServiceClient {
 
     @Override
     public Optional<Client> getClient(long id) {
-        Client cached = cache.get(String.valueOf(id));
+        String key = String.valueOf(id);
+        Client cached = cache.get(key);
         if (cached != null) {
             log.info("cache hit id={}", id);
             return Optional.of(cached);
@@ -49,20 +50,13 @@ public class DbServiceClientImpl implements DBServiceClient {
 
         return transactionManager.doInReadOnlyTransaction(
                 session -> clientDataTemplate.findById(session, id).map(client -> {
-                    if (client.getAddress() != null) client.getAddress().getStreet();
-                    if (client.getPhones() != null) client.getPhones().size();
-                    cache.put(String.valueOf(id), client);
+                    cache.put(key, client);
                     return client;
                 }));
     }
 
     @Override
     public List<Client> findAll() {
-        return transactionManager.doInReadOnlyTransaction(session -> clientDataTemplate.findAll(session).stream()
-                .map(c -> {
-                    if (c.getAddress() != null) c.getAddress().getStreet();
-                    return c;
-                })
-                .toList());
+        return transactionManager.doInReadOnlyTransaction(session -> clientDataTemplate.findAll(session));
     }
 }

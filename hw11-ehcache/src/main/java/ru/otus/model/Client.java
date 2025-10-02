@@ -23,11 +23,11 @@ public class Client implements Cloneable {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "address_id", unique = true, nullable = false)
     private Address address;
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Phone> phones = new ArrayList<>();
 
     public Client(String name) {
@@ -39,22 +39,11 @@ public class Client implements Cloneable {
         this.name = name;
     }
 
-    @SuppressWarnings("this-escape")
     public Client(Long id, String name, Address address, List<Phone> phones) {
         this.id = id;
         this.name = name;
-
-        if (address != null) {
-            this.address = address;
-            address.setClient(this);
-        }
-
-        if (phones != null) {
-            for (Phone p : phones) {
-                this.phones.add(p);
-                p.setClient(this);
-            }
-        }
+        setAddress(address);
+        setPhones(phones);
     }
 
     public void setAddress(Address address) {
@@ -90,12 +79,10 @@ public class Client implements Cloneable {
     @Override
     public Client clone() {
         Client copy = new Client(this.id, this.name);
-
         if (this.address != null) {
             Address addrCopy = new Address(this.address.getId(), this.address.getStreet());
             copy.setAddress(addrCopy);
         }
-
         if (this.phones != null) {
             for (Phone p : this.phones) {
                 Phone pCopy = new Phone(p.getId(), p.getNumber());

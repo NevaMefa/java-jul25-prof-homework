@@ -14,7 +14,7 @@ public class GcDropDemo {
         HwCache<String, Client> cache = new MyCache<>();
 
         for (long i = 0; i < 300_000; i++) {
-            String key = String.valueOf(i); // Преобразуем Long в String
+            String key = String.valueOf(i);
             cache.put(key, new Client(i, "N" + i, null, List.of()));
             if (i % 50_000 == 0) System.out.println("put " + i);
         }
