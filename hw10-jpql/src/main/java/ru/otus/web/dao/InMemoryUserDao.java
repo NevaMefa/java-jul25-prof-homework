@@ -4,6 +4,7 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
 import ru.otus.crm.model.User;
 
 @SuppressWarnings("java:S2068")
@@ -15,13 +16,14 @@ public class InMemoryUserDao implements UserDao {
 
     public InMemoryUserDao() {
         users = new HashMap<>();
-        users.put(1L, new User(1L, "Крис Гир", "user1", DEFAULT_PASSWORD));
-        users.put(2L, new User(2L, "Ая Кэш", "user2", DEFAULT_PASSWORD));
-        users.put(3L, new User(3L, "Десмин Боргес", "user3", DEFAULT_PASSWORD));
-        users.put(4L, new User(4L, "Кетер Донохью", "user4", DEFAULT_PASSWORD));
-        users.put(5L, new User(5L, "Стивен Шнайдер", "user5", DEFAULT_PASSWORD));
-        users.put(6L, new User(6L, "Джанет Вэрни", "user6", DEFAULT_PASSWORD));
-        users.put(7L, new User(7L, "Брэндон Смит", "user7", DEFAULT_PASSWORD));
+        users.put(1L, new User(1L, "Крис Гир", "user1", DEFAULT_PASSWORD, false));
+        users.put(2L, new User(2L, "Ая Кэш", "user2", DEFAULT_PASSWORD, false));
+        users.put(3L, new User(3L, "Десмин Боргес", "user3", DEFAULT_PASSWORD, false));
+        users.put(4L, new User(4L, "Кетер Донохью", "user4", DEFAULT_PASSWORD, false));
+        users.put(5L, new User(5L, "Стивен Шнайдер", "user5", DEFAULT_PASSWORD, false));
+        users.put(6L, new User(6L, "Джанет Вэрни", "user6", DEFAULT_PASSWORD, false));
+        users.put(7L, new User(7L, "Брэндон Смит", "user7", DEFAULT_PASSWORD, false));
+        users.put(8L, new User(8L, "Админ", "admin", DEFAULT_PASSWORD, true));
     }
 
     @Override
@@ -31,8 +33,9 @@ public class InMemoryUserDao implements UserDao {
 
     @Override
     public Optional<User> findRandomUser() {
-
-        return users.values().stream().skip(random.nextInt(users.size() - 1)).findFirst();
+        return users.values().stream()
+                .skip(random.nextInt(users.size()))
+                .findFirst();
     }
 
     @Override

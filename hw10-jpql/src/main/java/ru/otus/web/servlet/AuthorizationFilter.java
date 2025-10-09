@@ -10,6 +10,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
 import java.io.IOException;
 
 public class AuthorizationFilter implements Filter {
@@ -28,19 +29,22 @@ public class AuthorizationFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         String uri = request.getRequestURI();
-        this.context.log("Requested Resource:" + uri);
+        this.context.log("Requested Resource: " + uri);
 
         HttpSession session = request.getSession(false);
 
-        if (session == null) {
-            response.sendRedirect("/login");
-        } else {
-            filterChain.doFilter(servletRequest, servletResponse);
+        if (session == null || session.getAttribute("user") == null) {
+            if (!uri.endsWith("/login")) {
+                response.sendRedirect("/login");
+                return;
+            }
         }
+
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override
     public void destroy() {
-        // Not implemented
+        // Не реализовано
     }
 }

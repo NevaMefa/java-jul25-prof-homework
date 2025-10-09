@@ -40,29 +40,21 @@ public class WebServerSimpleDemo {
         UserDao userDao = new InMemoryUserDao();
         Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
         TemplateProcessor templateProcessor = new TemplateProcessorImpl(TEMPLATES_DIR);
-
-        // Создаем SessionFactory для работы с Hibernate
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-
-        // Создаем TransactionManager с использованием SessionFactory
         TransactionManager transactionManager = new TransactionManagerHibernate(sessionFactory);
-
-        // Создаем DataTemplate для работы с клиентами (используя Hibernate)
         DataTemplate<Client> clientDataTemplate = new DataTemplateHibernate<>(Client.class);
 
-        // Создаем DBServiceClient и UserAuthService
         DBServiceClient dbServiceClient = new DbServiceClientImpl(transactionManager, clientDataTemplate);
         UserAuthService userAuthService = new UserAuthServiceImpl(userDao);
 
-        // Передаем все зависимости в конструктор
         UsersWebServer usersWebServer = new UsersWebServerSimple(
                 WEB_SERVER_PORT,
                 userDao,
-                dbServiceClient, // Передаем dbServiceClient
+                dbServiceClient,
                 gson,
                 templateProcessor,
-                userAuthService // Передаем userAuthService
-                );
+                userAuthService
+        );
 
         usersWebServer.start();
         usersWebServer.join();

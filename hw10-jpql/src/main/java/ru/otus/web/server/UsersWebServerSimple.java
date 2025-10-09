@@ -1,6 +1,7 @@
 package ru.otus.web.server;
 
 import com.google.gson.Gson;
+import org.eclipse.jetty.ee10.servlet.FilterHolder;
 import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
 import org.eclipse.jetty.ee10.servlet.ServletHolder;
 import org.eclipse.jetty.server.Handler;
@@ -11,22 +12,20 @@ import ru.otus.web.dao.UserDao;
 import ru.otus.web.helpers.FileSystemHelper;
 import ru.otus.web.services.TemplateProcessor;
 import ru.otus.web.services.UserAuthService;
-import ru.otus.web.servlet.LoginServlet;
-import ru.otus.web.servlet.UsersApiServlet;
-import ru.otus.web.servlet.UsersServlet;
+import ru.otus.web.servlet.*;
 
 public class UsersWebServerSimple implements UsersWebServer {
     private static final String START_PAGE_NAME = "index.html";
     private static final String COMMON_RESOURCES_DIR = "static";
 
     private final UserDao userDao;
-    private final DBServiceClient dbServiceClient; // Добавлено
+    private final DBServiceClient dbServiceClient;
     private final Gson gson;
     protected final TemplateProcessor templateProcessor;
-    private final UserAuthService userAuthService; // Добавлено
+    private final UserAuthService userAuthService;
     private final Server server;
 
-    // Обновленный конструктор с добавленными зависимостями
+
     public UsersWebServerSimple(
             int port,
             UserDao userDao,
@@ -66,13 +65,19 @@ public class UsersWebServerSimple implements UsersWebServer {
 
         Handler.Sequence sequence = new Handler.Sequence();
         sequence.addHandler(resourceHandler);
-        sequence.addHandler(applySecurity(servletContextHandler, "/users", "/api/user/*"));
+        sequence.addHandler(
+                applySecurity(servletContextHandler, "/users", "/api/user/*", "/admin"));
 
         server.setHandler(sequence);
     }
 
     @SuppressWarnings({"squid:S1172"})
     protected Handler applySecurity(ServletContextHandler servletContextHandler, String... paths) {
+
+        AuthorizationFilter authorizationFilter = new AuthorizationFilter();
+        for (String path : paths) {
+            servletContextHandler.addFilter(new FilterHolder(authorizationFilter), path, null);
+        }
         return servletContextHandler;
     }
 
@@ -88,20 +93,21 @@ public class UsersWebServerSimple implements UsersWebServer {
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
-        // Передаем dbServiceClient в UsersServlet
-        servletContextHandler.addServlet(
-                new ServletHolder(new UsersServlet(templateProcessor, dbServiceClient)), "/users");
 
-        // Передаем dbServiceClient и gson в UsersApiServlet
+        servletContextHandler.addServlet(
+                new ServletHolder(new UsersServlet(templateProcessor, dbServiceClient, userDao, userAuthService)),
+                "/users");
+
+
         servletContextHandler.addServlet(new ServletHolder(new UsersApiServlet(userDao, gson)), "/api/user/*");
 
-        // Передаем userAuthService и templateProcessor в LoginServlet
+
         servletContextHandler.addServlet(
                 new ServletHolder(new LoginServlet(templateProcessor, userAuthService)), "/login");
 
-        // Еще один сервлет для админов (передаем dbServiceClient)
+
         servletContextHandler.addServlet(
-                new ServletHolder(new UsersServlet(templateProcessor, dbServiceClient)), "/admin");
+                new ServletHolder(new AdminServlet(templateProcessor, dbServiceClient, userAuthService)), "/admin");
 
         return servletContextHandler;
     }

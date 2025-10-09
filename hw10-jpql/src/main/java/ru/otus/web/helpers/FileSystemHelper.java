@@ -8,7 +8,8 @@ import java.util.Optional;
 @SuppressWarnings({"squid:S112"})
 public final class FileSystemHelper {
 
-    private FileSystemHelper() {}
+    private FileSystemHelper() {
+    }
 
     public static String localFileNameOrResourceNameToFullPath(String fileOrResourceName) {
         String path = null;

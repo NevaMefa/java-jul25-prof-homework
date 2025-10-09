@@ -41,7 +41,7 @@ class UsersWebServerImplTest {
 
     private static final long DEFAULT_USER_ID = 1L;
 
-    private static final User DEFAULT_USER = new User(DEFAULT_USER_ID, "Vasya", "user1", "11111");
+    private static final User DEFAULT_USER = new User(DEFAULT_USER_ID, "Vasya", "user1", "11111", false);
 
     private static Gson gson;
     private static UsersWebServer webServer;

@@ -1,5 +1,8 @@
 package ru.otus.web.services;
 
+import java.util.Optional;
+
+import ru.otus.crm.model.User;
 import ru.otus.web.dao.UserDao;
 
 public class UserAuthServiceImpl implements UserAuthService {
@@ -12,8 +15,12 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     @Override
     public boolean authenticate(String login, String password) {
-        return userDao.findByLogin(login)
-                .map(user -> user.getPassword().equals(password))
-                .orElse(false);
+        Optional<User> user = userDao.findByLogin(login);
+        return user.isPresent() && user.get().getPassword().equals(password);
+    }
+
+    public boolean isAdmin(String login) {
+        Optional<User> user = userDao.findByLogin(login);
+        return user.isPresent() && user.get().isAdmin();
     }
 }

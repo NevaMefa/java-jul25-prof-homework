@@ -1,9 +1,11 @@
 package ru.otus.web.server;
 
 import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
 import org.eclipse.jetty.ee10.servlet.security.ConstraintMapping;
 import org.eclipse.jetty.ee10.servlet.security.ConstraintSecurityHandler;
@@ -26,17 +28,17 @@ public class UsersWebServerWithBasicSecurity extends UsersWebServerSimple {
             int port,
             LoginService loginService,
             UserDao userDao,
-            DBServiceClient dbServiceClient, // Добавляем dbServiceClient
+            DBServiceClient dbServiceClient,
             Gson gson,
             TemplateProcessor templateProcessor,
-            UserAuthService userAuthService) { // Добавляем userAuthService
+            UserAuthService userAuthService) {
         super(
                 port,
                 userDao,
                 dbServiceClient,
                 gson,
                 templateProcessor,
-                userAuthService); // Передаем все параметры в суперконструктор
+                userAuthService);
         this.loginService = loginService;
     }
 
@@ -53,7 +55,6 @@ public class UsersWebServerWithBasicSecurity extends UsersWebServerSimple {
         });
 
         ConstraintSecurityHandler security = new ConstraintSecurityHandler();
-        // как декодировать стороку с юзером:паролем https://www.base64decode.org/
         security.setAuthenticator(new BasicAuthenticator());
 
         security.setLoginService(loginService);
