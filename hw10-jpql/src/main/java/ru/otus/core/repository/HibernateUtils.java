@@ -1,6 +1,7 @@
 package ru.otus.core.repository;
 
 import java.util.Arrays;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -10,7 +11,8 @@ import org.hibernate.cfg.Configuration;
 
 public final class HibernateUtils {
 
-    private HibernateUtils() {}
+    private HibernateUtils() {
+    }
 
     public static SessionFactory buildSessionFactory(Configuration configuration, Class<?>... annotatedClasses) {
         MetadataSources metadataSources = new MetadataSources(createServiceRegistry(configuration));

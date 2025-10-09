@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Админская страница</title>
+    <style>
+        /* Простые стили для кнопки и таблицы */
+        #clientsTable {
+            display: none; /* Скрыть таблицу по умолчанию */
+        }
+    </style>
+    <script>
+        // Функция для переключения видимости списка клиентов
+        function toggleClients() {
+            var table = document.getElementById('clientsTable');
+            if (table.style.display === 'none') {
+                table.style.display = 'table'; // Показываем таблицу
+            } else {
+                table.style.display = 'none'; // Скрываем таблицу
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>Админская страница</h1>
+
+<!-- Форма для создания нового клиента -->
+<h3>Создать нового клиента</h3>
+<form action="/admin" method="post">
+    <label for="clientName">Имя клиента:</label>
+    <input type="text" id="clientName" name="clientName" required>
+    <br>
+    <label for="clientAddress">Адрес:</label>
+    <input type="text" id="clientAddress" name="clientAddress">
+    <br>
+    <label for="clientPhone">Телефон:</label>
+    <input type="text" id="clientPhone" name="clientPhone">
+    <br>
+    <input type="submit" value="Создать клиента">
+</form>
+
+<!-- Кнопка для отображения списка клиентов -->
+<button onclick="toggleClients()">Показать список клиентов</button>
+
+<!-- Список клиентов, который будет скрыт по умолчанию -->
+<h3>Список клиентов</h3>
+<table id="clientsTable" border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Имя</th>
+        <th>Адрес</th>
+        <th>Телефон</th>
+    </tr>
+    </thead>
+    <tbody>
+    <#list clients as client>
+    <tr>
+        <td>${client.id}</td>
+        <td>${client.name}</td>
+        <td>${client.address.street}</td>
+        <td>
+            <#list client.phones as phone>
+            ${phone.number}
+        </#list>
+        </td>
+    </tr>
+    </#list>
+    </tbody>
+</table>
+</body>
+</html>

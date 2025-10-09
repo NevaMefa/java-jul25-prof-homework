@@ -4,19 +4,32 @@
 
 <hibernate-configuration>
   <session-factory>
+    <property name="hibernate.hbm2ddl.auto">update</property>
+    <!-- Диалект для PostgreSQL -->
     <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
 
-
+    <!-- Настройки подключения к базе данных -->
     <property name="hibernate.connection.url">jdbc:postgresql://localhost:5430/demoDB</property>
-
     <property name="hibernate.connection.username">usr</property>
     <property name="hibernate.connection.password">pwd</property>
 
+    <!-- Показывать SQL-запросы в консоли -->
     <property name="hibernate.show_sql">true</property>
+
+    <!-- Генерация статистики -->
     <property name="hibernate.generate_statistics">true</property>
 
+    <!-- Проверка схемы базы данных -->
     <property name="hibernate.hbm2ddl.auto">validate</property>
+
+    <!-- Отключение ленивой загрузки вне транзакций -->
     <property name="hibernate.enable_lazy_load_no_trans">false</property>
+
+    <!-- Указываем пакеты с сущностями, которые будут использоваться Hibernate -->
+    <mapping class="ru.otus.crm.model.Client"/>
+    <mapping class="ru.otus.crm.model.Address"/>
+    <mapping class="ru.otus.crm.model.Phone"/>
+    <mapping class="ru.otus.crm.model.User"/>
 
   </session-factory>
 </hibernate-configuration>
