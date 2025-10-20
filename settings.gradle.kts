@@ -11,6 +11,8 @@ include("hw09-jdbc")
 include("hw10-jpql")
 include("hw11-ehcache")
 include("hw12-webServer")
+include("hw13-di")
+
 
 
 
@@ -36,4 +38,3 @@ pluginManagement {
         id("com.diffplug.spotless") version spotless
     }
 }
-
