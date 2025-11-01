@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Клиенты</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <style>
+        body { font-family: sans-serif; max-width: 900px; margin: 40px auto; }
+        table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+        th, td { border: 1px solid #ddd; padding: 8px 10px; text-align: left; }
+        th { background: #f3f3f3; }
+        form { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 8px; }
+        input, button { padding: 8px; }
+    </style>
+</head>
+<body>
+<h1>Клиенты</h1>
+
+<table>
+    <thead>
+    <tr><th>ID</th><th>Имя</th><th>Адрес</th><th>Телефоны</th></tr>
+    </thead>
+    <tbody>
+    <tr th:each="c : ${clients}">
+        <td th:text="${c.id}"></td>
+        <td th:text="${c.name}"></td>
+        <td th:text="${c.addressStreet}"></td>
+        <td>
+            <span th:each="p, iterStat : ${c.phones}">
+                <span th:text="${p.number}"></span>
+                <span th:unless="${iterStat.last}">, </span>
+            </span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Добавить клиента</h3>
+<form th:action="@{/clients}" method="post">
+    <input type="text" name="name" placeholder="Имя" required/>
+    <input type="text" name="address" placeholder="Адрес"/>
+    <input type="text" name="phone" placeholder="Телефон"/>
+    <button type="submit">Добавить</button>
+</form>
+
+</body>
+</html>
