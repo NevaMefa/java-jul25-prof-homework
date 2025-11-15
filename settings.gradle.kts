@@ -13,6 +13,7 @@ include("hw11-ehcache")
 include("hw12-webServer")
 include("hw13-di")
 include("hw14-webSpringBoot")
+include("hw15-executors")
 
 
 
@@ -38,3 +39,4 @@ pluginManagement {
         id("com.diffplug.spotless") version spotless
     }
 }
+include("hw15-executors")
