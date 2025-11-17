@@ -2,15 +2,14 @@ package ru.otus.executors;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class homeworkExecutors {
+
     private static final Logger logger = LoggerFactory.getLogger(homeworkExecutors.class);
 
     private final Lock lock = new ReentrantLock();
@@ -21,8 +20,6 @@ public class homeworkExecutors {
     private int currentNumber = 1;
     private boolean ascending = true;
     private final int maxNumber = 10;
-    private int iterationCount = 0;
-    private final int maxIterations = 20;
 
     public static void main(String[] args) throws InterruptedException {
         new homeworkExecutors().go();
@@ -30,67 +27,54 @@ public class homeworkExecutors {
 
     private void go() throws InterruptedException {
         try (ExecutorService executor = Executors.newFixedThreadPool(2)) {
+            executor.submit(() -> printNumbers("Поток 1", true));
+            executor.submit(() -> printNumbers("Поток 2", false));
 
-            executor.submit(this::thread1Action);
-            executor.submit(this::thread2Action);
-
-            Thread.sleep(3000);
-
-            executor.shutdown();
-            if (!executor.awaitTermination(1, TimeUnit.SECONDS)) {
-                logger.info("Forcing shutdown...");
-                executor.shutdownNow();
-            }
+            Thread.sleep(10000);
+            executor.shutdownNow();
         }
     }
 
-    private void thread1Action() {
-        lock.lock();
+    private void printNumbers(String threadName, boolean isThread1) {
         try {
-            while (iterationCount < maxIterations && !Thread.currentThread().isInterrupted()) {
-                while (!isThread1Turn) {
-                    thread1Turn.await();
+            while (!Thread.currentThread().isInterrupted()) {
+                lock.lock();
+                try {
+                    // Ждем своей очереди
+                    if (isThread1) {
+                        while (!isThread1Turn) {
+                            thread1Turn.await();
+                        }
+                    } else {
+                        while (isThread1Turn) {
+                            thread2Turn.await();
+                        }
+                    }
+
+                    logger.info("{}: {}", threadName, currentNumber);
+
+                    if (!isThread1Turn) {
+                        updateNumber();
+                    }
+
+                    if (isThread1) {
+                        isThread1Turn = false;
+                        thread2Turn.signal();
+                    } else {
+                        isThread1Turn = true;
+                        thread1Turn.signal();
+                    }
+
+                } finally {
+                    lock.unlock();
                 }
-
-                if (iterationCount >= maxIterations) break;
-
-                logger.info("Поток 1: {}", currentNumber);
-                updateState();
-
-                isThread1Turn = false;
-                thread2Turn.signal();
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-        } finally {
-            lock.unlock();
         }
     }
 
-    private void thread2Action() {
-        lock.lock();
-        try {
-            while (iterationCount < maxIterations && !Thread.currentThread().isInterrupted()) {
-                while (isThread1Turn) {
-                    thread2Turn.await();
-                }
-
-                if (iterationCount >= maxIterations) break;
-
-                logger.info("Поток 2: {}", currentNumber);
-                updateState();
-
-                isThread1Turn = true;
-                thread1Turn.signal();
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    private void updateState() {
+    private void updateNumber() {
         if (ascending) {
             currentNumber++;
             if (currentNumber > maxNumber) {
@@ -104,6 +88,5 @@ public class homeworkExecutors {
                 ascending = true;
             }
         }
-        iterationCount++;
     }
 }
