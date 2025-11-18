@@ -14,6 +14,7 @@ include("hw12-webServer")
 include("hw13-di")
 include("hw14-webSpringBoot")
 include("hw15-executors")
+include("hw16-ConcurrentCollections")
 
 
 
@@ -40,3 +41,4 @@ pluginManagement {
     }
 }
 include("hw15-executors")
+include("hw16-ConcurrentCollections")
