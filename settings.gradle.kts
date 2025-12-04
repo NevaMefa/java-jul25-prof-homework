@@ -42,3 +42,4 @@ pluginManagement {
 }
 include("hw15-executors")
 include("hw16-ConcurrentCollections")
+include("hw19-urlShortener")
