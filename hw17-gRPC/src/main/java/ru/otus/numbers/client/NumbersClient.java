@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 public class NumbersClient {
     private static final Logger logger = LoggerFactory.getLogger(NumbersClient.class);
 
-    private static int currentValue = 1;
+    private static int currentValue = 0;
     private static int lastServerValue = 0;
     private static boolean newNumberAvailable = false;
     private static final Object lock = new Object();
