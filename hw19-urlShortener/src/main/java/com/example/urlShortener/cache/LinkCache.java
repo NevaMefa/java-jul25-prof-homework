@@ -15,16 +15,4 @@ public class LinkCache {
     public String get(String shortCode) {
         return cache.get(shortCode);
     }
-
-    public boolean contains(String shortCode) {
-        return cache.containsKey(shortCode);
-    }
-
-    public void remove(String shortCode) {
-        cache.remove(shortCode);
-    }
-
-    public void clear() {
-        cache.clear();
-    }
 }
