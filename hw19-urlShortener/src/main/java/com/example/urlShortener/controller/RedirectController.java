@@ -25,9 +25,15 @@ public class RedirectController {
             return ResponseEntity.notFound().build();
         }
 
+        // Инкрементируем счетчик (автоматически инвалидирует кеш благодаря @CacheEvict)
         linkService.incrementClickCount(shortCode);
-        log.info("Redirecting {} to {}", shortCode, originalUrl.get());
 
-        return ResponseEntity.status(302).header("Location", originalUrl.get()).build();
+        String url = originalUrl.get();
+        log.info("Redirecting {} to {}", shortCode, url.length() > 100 ? url.substring(0, 100) + "..." : url);
+
+        return ResponseEntity.status(302)
+                .header("Location", url)
+                .header("X-Cache-Status", "redirected")
+                .build();
     }
 }

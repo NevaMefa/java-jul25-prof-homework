@@ -18,7 +18,6 @@ include("hw16-ConcurrentCollections")
 include("hw17-gRPC")
 
 
-
 pluginManagement {
     val jgitver: String by settings
     val dependencyManagement: String by settings
@@ -40,10 +39,7 @@ pluginManagement {
         id("com.diffplug.spotless") version spotless
     }
 }
-include("hw15-executors")
-include("hw16-ConcurrentCollections")
 include("hw19-urlShortener")
-include("hw17-gRPC")
-include("hw17-gRPC:src:main:proto")
-findProject(":hw17-gRPC:src:main:proto")?.name = "proto"
-include("hw17-gRPC")
+include("L38-webflux-chat")
+include("L38-webflux-chat:client-service")
+include("L38-webflux-chat:datastore-service")

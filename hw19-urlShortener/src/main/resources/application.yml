@@ -1,0 +1,33 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password: ""
+  
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    open-in-view: false
+    show-sql: false
+  
+  main:
+    banner-mode: "off"
+  
+  # SPRING CACHE КОНФИГУРАЦИЯ
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=10000,expireAfterWrite=24h,expireAfterAccess=1h
+    cache-names: links, all-links, popular-links
+
+# Logging
+logging:
+  level:
+    com.example.urlshortener: INFO
+    root: WARN
+    org.springframework: WARN
+    org.hibernate: WARN
+    org.springframework.cache: DEBUG  # Для отладки кеширования
